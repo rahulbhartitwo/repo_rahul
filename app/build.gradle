@@ -27,7 +27,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "boolean", "ENABLE_PRODUCTION_MODE", "false"
-            buildConfigField "String", "BASE_URL", '"http://14.142.224.133:1080/gailapi-dev/"'
+            buildConfigField "String", "BASE_URL", '"https://jsonplaceholder.typicode.com/"'
 
         }
         release {

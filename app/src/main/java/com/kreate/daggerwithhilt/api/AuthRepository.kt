@@ -15,37 +15,7 @@ class AuthRepository @Inject constructor() {
     @Inject
     var apiCall: ApiCall? = null
 
-    //     Login API, As consider
-    fun getLogin(requestEntity: RequestEntity?): MutableLiveData<Resource<ResponseEntity?>> {
-        val mutableLiveData = MutableLiveData<Resource<ResponseEntity?>>()
-        mutableLiveData.value = Resource.loading(ResponseEntity())
-        (apiCall!!.getFetchData(requestEntity) as Call<ResponseEntity?>).enqueue(object :
-            Callback<ResponseEntity?> {
-            override fun onResponse(
-                call: Call<ResponseEntity?>,
-                response: Response<ResponseEntity?>
-            ) {
-                try {
-                    val entity = response.body()
-                    when (response.code()) {
-                        200 -> mutableLiveData.setValue(Resource.success(entity, entity!!.message))
-                        201 -> mutableLiveData.setValue(Resource.success(entity, entity!!.message))
-                        else -> mutableLiveData.setValue(
-                            Resource.error(
-                                response.toString(),
-                                ResponseEntity()
-                            )
-                        )
-                    }
-                } catch (e: Exception) {
-                    mutableLiveData.setValue(Resource.error(e.message, ResponseEntity()))
-                }
-            }
+    suspend fun getData() =  apiCall!!.getData()
+    suspend fun getFetchData() =  apiCall!!.getLogin()
 
-            override fun onFailure(call: Call<ResponseEntity?>, t: Throwable) {
-                mutableLiveData.value = Resource.error(t.toString(), ResponseEntity())
-            }
-        })
-        return mutableLiveData
-    }
 }
