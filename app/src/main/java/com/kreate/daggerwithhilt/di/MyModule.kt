@@ -9,6 +9,8 @@ import com.google.gson.GsonBuilder
 import com.kreate.daggerwithhilt.*
 import com.kreate.daggerwithhilt.api.ApiCall
 import com.kreate.daggerwithhilt.api.AuthRepository
+import com.kreate.daggerwithhilt.common.AppDBImp
+import com.kreate.daggerwithhilt.common.AppDBInterface
 import com.kreate.daggerwithhilt.db.AppDatabase
 import com.kreate.daggerwithhilt.entity.room.DummyUserDao
 import dagger.Module
@@ -50,7 +52,8 @@ object MyModule {
             .addInterceptor(
                 Interceptor { chain: Interceptor.Chain ->
                     val requestBuilder: Request.Builder = chain.request().newBuilder()
-                    requestBuilder.header("Content-Type", "application/json")
+                    requestBuilder.header("Content-Type", "application/json; charset=utf-8")
+                    requestBuilder.header("Accept", "application/json")
                     chain.proceed(requestBuilder.build())
                 }).build() else OkHttpClient.Builder().addInterceptor(loggingInterceptor!!)
             .connectTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS)
@@ -79,7 +82,7 @@ object MyModule {
     @Singleton
     @Provides
     fun provideGsonConverterFactory(gson : Gson): GsonConverterFactory {
-        return GsonConverterFactory.create()
+        return GsonConverterFactory.create(gson)
     }
 
     @Singleton
@@ -106,17 +109,16 @@ object MyModule {
     //============== DB ===================
     @Singleton
     @Provides
-    fun provideAppDatabase(@ApplicationContext context: Context?): AppDatabase? {
-        return Room.databaseBuilder(context!!, AppDatabase::class.java, "mydb")
-            .fallbackToDestructiveMigration().build()
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(context, AppDatabase::class.java, "mydb")
+            .fallbackToDestructiveMigration().allowMainThreadQueries().build()
     }
 
     @Singleton
     @Provides
-    fun provideDbDao(appDatabase: AppDatabase): DummyUserDao? {
+    fun provideDbDao(appDatabase: AppDatabase): DummyUserDao {
         return appDatabase.userDao()
     }
-
 // ================================
     @Singleton
     @Provides
@@ -131,6 +133,8 @@ object MyModule {
     fun provideSomeInterface2(): SomeInterface {
         return SomeInterfaceImp("2")
     }
+
+
 }
 
 @Qualifier

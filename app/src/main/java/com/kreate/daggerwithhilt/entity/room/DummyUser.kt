@@ -1,15 +1,20 @@
-package com.kreate.daggerwithhilt.entity.room;
+package com.kreate.daggerwithhilt.entity.room
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Entity
-public class DummyUser {
+@Entity(tableName = "User")
+class DummyUser {
+    @JvmField
     @PrimaryKey
-    int uid;
-    @ColumnInfo(name = "first_name")
-    String firstName;
-    @ColumnInfo(name = "last_name")
-    String lastname;
+    var uid = 0
+
+    @JvmField
+    @ColumnInfo(name = "name")
+    var name: String? = null
+
+    @JvmField
+    @ColumnInfo(name = "age")
+    var age: String? = null
 }

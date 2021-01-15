@@ -11,10 +11,10 @@ import java.util.List;
 public
 interface DummyUserDao {
 
-    @Query("SELECT * FROM DummyUser")
+    @Query("SELECT * FROM User")
     List<DummyUser> getAllUser();
 
-    @Query("SELECT * FROM DummyUser WHERE first_name LIKE :first AND last_name LIKE :last LIMIT 1")
+    @Query("SELECT * FROM User WHERE name LIKE :first AND age LIKE :last LIMIT 1")
     DummyUser findByName(String first , String last );
 
     @Insert

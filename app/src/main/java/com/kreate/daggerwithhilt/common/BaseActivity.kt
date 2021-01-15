@@ -1,52 +1,50 @@
-package com.kreate.daggerwithhilt.common;
+package com.kreate.daggerwithhilt.common
 
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle
+import android.os.PersistableBundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import com.kreate.daggerwithhilt.entity.room.DummyUserDao
+import javax.inject.Inject
 
+open class BaseActivity : AppCompatActivity(), View.OnClickListener {
 
-public class BaseActivity extends AppCompatActivity {
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    @JvmField
+    @Inject
+    var dbInvoked: DummyUserDao? = null
+    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onCreate(savedInstanceState, persistentState)
     }
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    override fun onStart() {
+        super.onStart()
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+    override fun onStop() {
+        super.onStop()
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    override fun onPause() {
+        super.onPause()
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 
-   public void init(){
+    fun init() {}
+    fun listener() {}
+
+    override fun onClick(p0: View?) {
 
     }
-    public void listener(){
 
-    }
 }

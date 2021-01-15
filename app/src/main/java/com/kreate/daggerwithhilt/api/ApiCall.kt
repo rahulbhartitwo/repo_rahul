@@ -1,9 +1,8 @@
 package com.kreate.daggerwithhilt.api
 
-import com.kreate.daggerwithhilt.entity.LoginEntity
+import com.kreate.daggerwithhilt.entity.response.LoginEntity
 import com.kreate.daggerwithhilt.entity.request.RequestEntity
 import com.kreate.daggerwithhilt.entity.response.ResponseEntity
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
