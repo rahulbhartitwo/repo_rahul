@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.kreate.daggerwithhilt.api.Status
 import com.kreate.daggerwithhilt.common.BaseActivity
 import com.kreate.daggerwithhilt.databinding.ActivityMainBinding
 import com.kreate.daggerwithhilt.entity.room.DummyUser
+import com.kreate.daggerwithhilt.entity.room.UserRegistration
 import com.kreate.daggerwithhilt.utils.showToast
 import com.kreate.daggerwithhilt.viewmodel.MyViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,24 +28,21 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         binding.submit.setOnClickListener(this)
 
-        viewMode.getData().observe(this, {
-            it.let { resource ->
+        viewMode.getFetchData().observe(this, {
+            it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
-//                        Log.e("TAG","Succes : ${it.message}")
                         it.data?.let {
-                            it.title.let {
-                                Log.e(tag, it)
-//                                snackbar("API Invoked ==> $it")
+                            Log.e(tag,"Succes : ${it.title}")
+                            it.title?.let {
                             }
                         }
                     }
                     Status.ERROR -> {
-                        Log.e(tag, "ERROR")
-                        it?.message.let {
-                            Log.e(tag, it!!)
-//                            snackbar(it)
+                        Log.e(tag, "Error")
+                        it.message.let {
                         }
+
                     }
                     Status.LOADING -> {
                         Log.e(tag, "Loading")
@@ -58,7 +57,10 @@ class MainActivity : BaseActivity() {
         when (p0) {
             binding.submit -> {
                 showToast(this, "Call")
-                val entity  =  DummyUser().also { it.name = binding.name.text.toString(); it.age = binding.age.text.toString() }
+                val entity  =  UserRegistration().also {
+                    it.username = binding.etUsername.text.toString()
+                    it.age = binding.etAge.text.toString()
+                }
                 dbInvoked!!.insertAll(entity)
             }
         }
@@ -67,6 +69,7 @@ class MainActivity : BaseActivity() {
 //
 class SomeInterfaceImp
 @Inject constructor(val str: String) : SomeInterface {
+
     override val someThing: String
         get() = "Rahul $str"
 }

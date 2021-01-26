@@ -15,7 +15,6 @@ class AuthRepository @Inject constructor() {
     @Inject
     var apiCall: ApiCall? = null
 
-    suspend fun getData() =  apiCall!!.getData()
-    suspend fun getFetchData() =  apiCall!!.getLogin()
+    suspend fun getFetchData() =  apiCall!!.getData()
 
 }

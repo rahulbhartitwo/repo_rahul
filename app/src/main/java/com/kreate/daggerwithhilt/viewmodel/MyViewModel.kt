@@ -6,17 +6,19 @@ import com.kreate.daggerwithhilt.api.AuthRepository
 import com.kreate.daggerwithhilt.api.Resource
 import com.kreate.daggerwithhilt.entity.request.RequestEntity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MyViewModel  @ViewModelInject constructor(var authRepository: AuthRepository) : ViewModel() {
 
-    fun getData() =  liveData(Dispatchers.IO) {
-        emit(Resource.loading())
+    fun getFetchData() = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = authRepository.getData()))
+            emit(Resource.success(data = authRepository.getFetchData()))
         } catch (e: Exception) {
-            emit(Resource.error(data = null, e.message!!))
+            emit(Resource.error(data = null, message = e.message ?: "Error Occurred!"))
         }
     }
 }

@@ -18,7 +18,7 @@ interface DummyUserDao {
     DummyUser findByName(String first , String last );
 
     @Insert
-    void insertAll(DummyUser users );
+    void insertAll(UserRegistration users );
 
     @Delete
     void delete(DummyUser user);

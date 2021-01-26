@@ -1,3 +1,4 @@
+include ':pagination'
 include ':mapmodul'
 include ':app'
 rootProject.name = "DaggerWithHilt"

@@ -6,11 +6,10 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.kreate.daggerwithhilt.*
+import com.kreate.daggerwithhilt.BuildConfig
+import com.kreate.daggerwithhilt.SomeInterface
+import com.kreate.daggerwithhilt.SomeInterfaceImp
 import com.kreate.daggerwithhilt.api.ApiCall
-import com.kreate.daggerwithhilt.api.AuthRepository
-import com.kreate.daggerwithhilt.common.AppDBImp
-import com.kreate.daggerwithhilt.common.AppDBInterface
 import com.kreate.daggerwithhilt.db.AppDatabase
 import com.kreate.daggerwithhilt.entity.room.DummyUserDao
 import dagger.Module
@@ -20,11 +19,8 @@ import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-
 import okhttp3.Request
-
 import okhttp3.logging.HttpLoggingInterceptor
-
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -34,7 +30,7 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 @Module
 object MyModule {
-    var BASE_URL_PRODUCTION = "http://14.142.224.133:1080/gailapi-dev/"
+    var BASE_URL_PRODUCTION = "https://jsonplaceholder.typicode.com/"
 
     @Singleton
     @Provides
@@ -62,7 +58,6 @@ object MyModule {
                     val requestBuilder: Request.Builder = chain.request().newBuilder()
                     requestBuilder.header("Content-Type", "application/json; charset=utf-8")
                     requestBuilder.header("Accept", "application/json")
-//                    requestBuilder.header("accept-charset", "UTF-8")
                     chain.proceed(requestBuilder.build())
                 }).build()
     }
@@ -76,22 +71,27 @@ object MyModule {
             .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
             .setPrettyPrinting()
             .setVersion(1.0)
-            //.excludeFieldsWithoutExposeAnnotation()
+            .excludeFieldsWithoutExposeAnnotation()
             .create()
-    }
-    @Singleton
-    @Provides
-    fun provideGsonConverterFactory(gson : Gson): GsonConverterFactory {
-        return GsonConverterFactory.create(gson)
     }
 
     @Singleton
     @Provides
-    fun provideRetrofit(client: OkHttpClient, gsonFactor : GsonConverterFactory): Retrofit.Builder {
-        return Retrofit.Builder().baseUrl(
-            if (BuildConfig.DEBUG) if (BuildConfig.ENABLE_PRODUCTION_MODE) BASE_URL_PRODUCTION else BuildConfig.BASE_URL else BuildConfig.BASE_URL
-        ).addConverterFactory(gsonFactor)
+    fun provideGsonConverterFactory(gson: Gson): GsonConverterFactory {
+        return GsonConverterFactory.create()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(client: OkHttpClient, gsonFactor: GsonConverterFactory): Retrofit.Builder {
+        return Retrofit.Builder()
+            .baseUrl(
+                if (BuildConfig.DEBUG)
+                    if (BuildConfig.ENABLE_PRODUCTION_MODE) BASE_URL_PRODUCTION else BuildConfig.BASE_URL
+                else BuildConfig.BASE_URL
+            )
             .client(client)
+            .addConverterFactory(gsonFactor)
     }
 
     @Singleton
@@ -119,7 +119,8 @@ object MyModule {
     fun provideDbDao(appDatabase: AppDatabase): DummyUserDao {
         return appDatabase.userDao()
     }
-// ================================
+
+    // ================================
     @Singleton
     @Provides
     @provideSomeInterface1
